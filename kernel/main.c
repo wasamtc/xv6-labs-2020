@@ -17,6 +17,9 @@ main()
     printf("xv6 kernel is booting\n");
     printf("\n");
     kinit();         // physical page allocator
+    // uint64 n = (PHYSTOP - begin) / PGSIZE + 2;
+    // int temp[n];
+    // pagearray = temp;
     kvminit();       // create kernel page table
     kvminithart();   // turn on paging
     procinit();      // process table
