@@ -8,6 +8,8 @@
 #define NBUCKET 5
 #define NKEYS 100000
 
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
 struct entry {
   int key;
   int value;
@@ -51,7 +53,9 @@ void put(int key, int value)
     e->value = value;
   } else {
     // the new is new.
+    pthread_mutex_lock(&lock);
     insert(key, value, &table[i], table[i]);
+    pthread_mutex_unlock(&lock);
   }
 }
 
@@ -144,4 +148,6 @@ main(int argc, char *argv[])
 
   printf("%d gets, %.3f seconds, %.0f gets/second\n",
          NKEYS*nthread, t1 - t0, (NKEYS*nthread) / (t1 - t0));
+
+  pthread_mutex_destroy(&lock);
 }
